@@ -1,7 +1,7 @@
+# Импорт стандартных и сторонних библиотек
 import argparse
 import os
 from pathlib import Path
-
 from dotenv import load_dotenv
 from openai import OpenAI
 
@@ -13,17 +13,18 @@ def text_to_speech(
     voice: str = "nova",
 ) -> None:
     """
-    Convert text to speech using OpenAI and save audio to a file.
+    Синтезирует речь из текста с помощью OpenAI и сохраняет аудио в файл.
     """
     # Загружаем переменные окружения из .env (если файл есть)
     load_dotenv()
 
+    # Проверяем наличие API-ключа
     if not os.getenv("OPENAI_API_KEY"):
         raise SystemExit("Не найден OPENAI_API_KEY. Укажите его в .env или переменных окружения.")
 
     client = OpenAI()
 
-    # Используем потоковую запись в файл, чтобы не держать аудио в памяти
+    # Синтез речи и сохранение результата в файл
     with client.audio.speech.with_streaming_response.create(
         model=model,
         voice=voice,
@@ -42,8 +43,7 @@ def main() -> None:
         "text",
         type=str,
         nargs="?",
-        default="Привет! Это тестовый пример синтеза речи через OpenAI.",
-        help="Текст для озвучивания (по умолчанию: короткий тестовый текст на русском)",
+        help="Текст для озвучивания (если не указан — будет запрошен интерактивно)",
     )
     parser.add_argument(
         "output_audio",
@@ -67,6 +67,14 @@ def main() -> None:
 
     args = parser.parse_args()
 
+    # Если текст не передан через аргументы, спросить у пользователя
+    if not args.text:
+        args.text = input("Введите текст для озвучивания: ").strip()
+        if not args.text:
+            print("Текст не введён. Завершение работы.")
+            return
+
+    # Запуск синтеза речи
     text_to_speech(
         text=args.text,
         output_path=args.output_audio,
