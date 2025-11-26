@@ -35,6 +35,7 @@ def main() -> None:
     parser.add_argument(
         "input_audio",
         type=Path,
+        nargs="?",
         help="Путь к входному аудиофайлу (например, WAV/MP3/OGG)",
     )
     parser.add_argument(
@@ -51,7 +52,16 @@ def main() -> None:
         help="Модель для распознавания (по умолчанию: gpt-4o-mini-transcribe)",
     )
 
+
     args = parser.parse_args()
+
+    # Если путь к аудиофайлу не передан, спросить у пользователя
+    if not args.input_audio:
+        user_path = input("Введите путь к аудиофайлу для распознавания: ").strip()
+        if not user_path:
+            print("Путь не введён. Завершение работы.")
+            return
+        args.input_audio = Path(user_path)
 
     if not args.input_audio.exists():
         raise SystemExit(f"Файл не найден: {args.input_audio}")
