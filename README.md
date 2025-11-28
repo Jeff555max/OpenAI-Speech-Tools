@@ -52,3 +52,5 @@ python stt.py path/to/audio.mp3 output.txt
 
 ## Лицензия
 MIT
+
+
