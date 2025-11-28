@@ -1,4 +1,4 @@
-# PEm03: OpenAI Speech Tools
+# OpenAI Speech Tools
 
 ## Описание
 
