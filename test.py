@@ -1,9 +1,15 @@
+
 from openai import OpenAI
 import sys
 import time
+import os
+from dotenv import load_dotenv
+
+# Загружаем переменные окружения из .env
+load_dotenv()
 
 client = OpenAI(
-    api_key="***REMOVED***",
+    api_key=os.getenv("OPENAI_API_KEY"),
     base_url="https://api.proxyapi.ru/openai/v1",
 )
 
