@@ -50,7 +50,5 @@ python stt.py path/to/audio.mp3 output.txt
 - Файл `.env` добавлен в `.gitignore` и не попадёт в репозиторий.
 - Для работы требуется валидный OpenAI API ключ.
 
-## Лицензия
-MIT
 
 
